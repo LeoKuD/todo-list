@@ -1,0 +1,67 @@
+.dark {
+  transition: 1s;
+  background-color: #1f1d36 !important;
+  color: #fff;
+}
+.dark nav {
+  transition: 1s;
+  background-color: #3f3351 !important;
+}
+.dark nav button {
+  background-color: #e9a6a6 !important;
+}
+.dark .Low {
+  transition: 1s;
+  background-color: #e9a6a6 !important;
+}
+.dark .Medium {
+  transition: 1s;
+  background-color: #864879 !important;
+}
+.dark .High {
+  transition: 1s;
+  background-color: #542d4c !important;
+}
+.dark .modal-content {
+  background-color: #e9a6a6 !important;
+}
+.dark form {
+  color: black;
+  background-color: #e9a6a6 !important;
+}
+.dark form input {
+  background-color: #e9a6a6;
+}
+.dark button:not(.close) {
+  transition: 1s;
+  background-color: #3f3351;
+  border-color: transparent;
+}
+.dark button:not(.close):hover {
+  background-color: #271f32;
+}
+.dark #btn-delete {
+  background-color: #e9a6a6;
+}
+.dark #btn-edit {
+  background-color: #3f3351;
+}
+.dark #btn-completed {
+  background-color: #1f1d36;
+}
+
+.empty-div {
+  padding: 0.3rem 0;
+}
+
+.Low {
+  background-color: green;
+}
+
+.Medium {
+  background-color: yellow;
+}
+
+.High {
+  background-color: orange;
+}

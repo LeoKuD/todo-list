@@ -1,0 +1,75 @@
+$bc-color-prymary: #1f1d36;
+$bc-color-secondary: #3f3351;
+$bc-color-3: #e9a6a6;
+$transition: 1s;
+
+.dark {
+  transition: $transition;
+  background-color: $bc-color-prymary !important;
+  color: #fff;
+
+  nav {
+  transition: $transition;
+
+    background-color: $bc-color-secondary !important;
+    button {
+      background-color: $bc-color-3 !important;
+    }
+  }
+  .Low {
+    transition: $transition;
+    background-color: #e9a6a6 !important;
+  }
+  .Medium {
+    transition: $transition;
+    background-color: #864879 !important;
+  }
+
+  .High {
+    transition: $transition;
+    background-color: darken($color: #864879, $amount: 15%) !important;
+  }
+  .modal-content {
+    background-color: $bc-color-3 !important;
+  }
+  form {
+    color: black;
+    background-color: $bc-color-3 !important;
+    input {
+      background-color: $bc-color-3;
+    }
+  }
+  button:not(.close) {
+    transition: $transition;
+    background-color: $bc-color-secondary;
+    border-color: transparent;
+    &:hover {
+      background-color: darken($color: $bc-color-secondary, $amount: 10%);
+    }
+  }
+  #btn-delete {
+    background-color: $bc-color-3;
+  }
+  #btn-edit {
+    background-color: $bc-color-secondary;
+  }
+  #btn-completed {
+    background-color: $bc-color-prymary;
+  }
+}
+
+.empty-div {
+  padding: 0.3rem 0;
+}
+
+.Low {
+  background-color: green;
+}
+
+.Medium {
+  background-color: yellow;
+}
+
+.High {
+  background-color: orange;
+}
