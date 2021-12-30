@@ -1,43 +1,43 @@
-$bc-color-prymary: #1f1d36;
+$bc-color-primary: #1f1d36;
 $bc-color-secondary: #3f3351;
-$bc-color-3: #e9a6a6;
+$bc-color-tertiary: #e9a6a6;
+$priority-color-primary-light: green;
+$priority-color-secondary-light: yellow;
+$priority-color-tertiary-light: orange;
+$bc-color-primary-light: #fff;
 $transition: 1s;
 
 .dark {
   transition: $transition;
-  background-color: $bc-color-prymary !important;
+  background-color: $bc-color-primary !important;
   color: #fff;
 
   nav {
-  transition: $transition;
-
+    transition: $transition;
     background-color: $bc-color-secondary !important;
     button {
-      background-color: $bc-color-3 !important;
+      background-color: $bc-color-tertiary !important;
     }
   }
   .Low {
-    transition: $transition;
-    background-color: #e9a6a6 !important;
+    background-color: $bc-color-tertiary !important;
   }
   .Medium {
-    transition: $transition;
-    background-color: #864879 !important;
+    background-color: $bc-color-secondary !important;
   }
 
   .High {
-    transition: $transition;
-    background-color: darken($color: #864879, $amount: 15%) !important;
+    background-color: darken(
+      $color: $bc-color-secondary,
+      $amount: 15%
+    ) !important;
   }
   .modal-content {
-    background-color: $bc-color-3 !important;
+    background-color: $bc-color-tertiary !important;
   }
   form {
     color: black;
-    background-color: $bc-color-3 !important;
-    input {
-      background-color: $bc-color-3;
-    }
+    background-color: $bc-color-tertiary !important;
   }
   button:not(.close) {
     transition: $transition;
@@ -48,28 +48,82 @@ $transition: 1s;
     }
   }
   #btn-delete {
-    background-color: $bc-color-3;
+    background-color: $bc-color-tertiary;
   }
   #btn-edit {
     background-color: $bc-color-secondary;
   }
   #btn-completed {
-    background-color: $bc-color-prymary;
+    background-color: $bc-color-primary;
   }
+  #dropdown-theme {
+    background-color: $bc-color-secondary;
+  }
+}
+#dropdown-theme {
+  transition: $transition;
+  min-width: 0;
 }
 
 .empty-div {
   padding: 0.3rem 0;
 }
 
-.Low {
-  background-color: green;
+.light {
+  transition: $transition;
+  body {
+    background-color: $bc-color-primary-light !important;
+  }
+  .Low {
+    background-color: $priority-color-primary-light;
+  }
+
+  .Medium {
+    background-color: $priority-color-secondary-light;
+  }
+
+  .High {
+    background-color: $priority-color-tertiary-light;
+  }
 }
 
-.Medium {
-  background-color: yellow;
+.toggle-button {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  margin: 0;
+  vertical-align: top;
+  background: #ffffff;
+  border: 1px solid #bbc1e1;
+  border-radius: 30px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: $transition;
 }
 
-.High {
-  background-color: orange;
+.toggle-button::after {
+  transition: $transition;
+  content: '';
+
+  display: inline-block;
+  position: absolute;
+  left: 3px;
+  top: 1.5px;
+
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  border-radius: 50%;
+
+  transform: translateX(0);
+}
+
+.toggle-button:checked::after {
+  transform: translateX(calc(100% + 3px));
+  background-color: $bc-color-tertiary;
+}
+.toggle-button:checked {
+  background-color: $bc-color-primary;
 }

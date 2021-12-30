@@ -1,13 +1,44 @@
-const myForm = document.getElementsByTagName('form')[0];
+const myForm = document.forms[0];
+const listCurrentTasks = document.getElementById('currentTasks');
+const listCompletedTasks = document.getElementById('completedTasks');
+const titleTodoBlock = document.getElementById('title-todo-block');
+const titleCompletedBlock = document.getElementById('title-completed-block');
+const content = document.getElementById('content');
+const toggleTheme = document.getElementById('toggle-theme');
+const btnAddTask = document.getElementById('btn-show-modal');
+const btnSubmitForm = myForm.elements['btn-submit'];
+const btnCloseForm = myForm.elements['btn-close'];
+const titleHeaderForm = document.querySelector('.modal-title');
+const exampleModal = document.getElementById('exampleModal');
+const btnSortUp = document.getElementById('sort-up');
+const btnSortDown = document.getElementById('sort-down');
 
+const body = document.body;
 let tasks;
+let listenerSubmitEditTask = null;
+let defaultSort;
+let defaultTheme;
 
 !localStorage.tasks
   ? (tasks = [])
   : (tasks = JSON.parse(localStorage.getItem('tasks')));
 
+!localStorage.sorting
+  ? (defaultSort = 'up')
+  : (defaultSort = localStorage.getItem('sorting'));
+
+  makeId = () => {
+    let ID = "";
+    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for ( let i = 0; i < 12; i++ ) {
+      ID += characters.charAt(Math.floor(Math.random() * 36));
+    }
+    return ID;
+  }
+
 function Task([title, text, priority]) {
-  this.id = Date.now();
+  this.id = makeId();
+  this.date = Date.now();
   this.title = title;
   this.text = text;
   this.priority = priority;
@@ -15,37 +46,50 @@ function Task([title, text, priority]) {
 }
 
 function fillHTMLList() {
-  const listCurrentTasks = document.getElementById('currentTasks');
-  const listCompletedTasks = document.getElementById('completedTasks');
-  const titleTodoBlock = document.getElementById('title-todo-block');
-  const titleCompletedBlock = document.getElementById('title-completed-block');
-  listCurrentTasks.innerHTML = '';
-  listCompletedTasks.innerHTML = '';
+  listCurrentTasks.textContent = '';
+  listCompletedTasks.textContent = '';
   if (tasks.length) {
-    tasks.forEach((item, index) => {
-      if (!item.isDone) {
-        listCurrentTasks.innerHTML += taskTemplate(item, index);
-      } else {
-        listCompletedTasks.innerHTML += taskTemplate(item, index);
-      }
-      titleTodoBlock.innerHTML = `ToDo (${
-        tasks.filter((item) => item.isDone === false).length
-      })`;
-      titleCompletedBlock.innerHTML = `Completed (${
-        tasks.filter((item) => item.isDone === true).length
-      })`;
-    });
+    if (defaultSort === 'up') {
+      tasks.forEach((item, index) => {
+        if (!item.isDone) {
+          listCurrentTasks.insertAdjacentHTML(
+            'beforeend',
+            taskTemplate(item, index)
+          );
+        } else {
+          listCompletedTasks.insertAdjacentHTML(
+            'beforeend',
+            taskTemplate(item, index)
+          );
+        }
+      });
+    } else if (defaultSort === 'down') {
+      tasks.forEach((item, index) => {
+        if (!item.isDone) {
+          listCurrentTasks.insertAdjacentHTML(
+            'afterbegin',
+            taskTemplate(item, index)
+          );
+        } else {
+          listCompletedTasks.insertAdjacentHTML(
+            'afterbegin',
+            taskTemplate(item, index)
+          );
+        }
+      });
+    }
+
   }
+  const countCompletedTasks = tasks.filter(
+    (item) => item.isDone === true
+  ).length;
+  titleTodoBlock.textContent = `ToDo (${tasks.length - countCompletedTasks})`;
+  titleCompletedBlock.textContent = `Completed (${countCompletedTasks})`;
 }
 
 function getDate(stamp) {
-  return `${new Date(stamp).getFullYear()}-${new Date(
-    stamp
-  ).getMonth()}-${new Date(stamp).getDate()} ${new Date(
-    stamp
-  ).getHours()}:${new Date(stamp).getMinutes()}:${new Date(
-    stamp
-  ).getSeconds()}`;
+  const date = new Date(stamp);
+  return ` ${date.getHours()}:${date.getMinutes()} ${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
 }
 
 function taskTemplate(item, index) {
@@ -55,8 +99,8 @@ function taskTemplate(item, index) {
                 <div class="d-flex w-100 justify-content-between">
                   <h5 class="mb-1">${item.title}</h5>
                   <div>
-                    <small class="mr-2">${item.priority}</small>
-                    <small>${getDate(item.id)}</small>
+                    <small class="mr-2">${item.priority} priority</small>
+                    <small>${getDate(item.date)}</small>
                   </div>
                 </div>
                 <p class="mb-1 w-100">
@@ -85,7 +129,7 @@ function taskTemplate(item, index) {
                       : '<div class="empty-div"></div>'
                   }
 
-                  <button data-index="${index}" type="button" class="btn btn-danger w-100" id="btn-delete">
+                  <button data-index="${item.id}" type="button" class="btn btn-danger w-100" id="btn-delete">
                     Delete
                   </button>
                 </div>
@@ -94,71 +138,75 @@ function taskTemplate(item, index) {
     `;
 }
 
-const updateLocalStorege = () => {
+const updateLocalStorage = () => {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
-document.getElementById('btn-show-modal').addEventListener('click', (e) => {
-  if (e.target.getAttribute('data-index') === null) {
-    myForm.reset();
-    myForm.elements['btn-close'].innerText = 'Close';
-    myForm.elements['btn-submit'].innerText = 'Add Task';
-    document.querySelector('.modal-title').innerText = `Add task`;
-    myForm.addEventListener('submit', taskSubmit, { once: true });
-  }
+const updateLocalStorageSorting = () => {
+  localStorage.setItem('sorting', defaultSort);
+};
+
+const updateLocalStorageTheme = () => {
+  localStorage.setItem('theme', defaultTheme);
+};
+
+btnAddTask.addEventListener('click', () => {
+  btnCloseForm.innerText = 'Close';
+  btnSubmitForm.innerText = 'Add Task';
+  titleHeaderForm.innerText = `Add task`;
+  myForm.addEventListener('submit', taskSubmit);
 });
 
 function taskSubmit(e) {
   e.preventDefault();
   const formValue = new FormData(myForm);
   tasks.push(new Task([...formValue.values()]));
-  updateLocalStorege();
+  updateLocalStorage();
   fillHTMLList();
   myForm.reset();
-  myForm['btn-close'].click();
+  btnCloseForm.click();
   myForm.removeEventListener('submit', taskSubmit);
 }
 
 function completeTask(index) {
   tasks[index].isDone = !tasks[index].isDone;
-  updateLocalStorege();
+  updateLocalStorage();
   fillHTMLList();
 }
 
-document.getElementById('all-content').addEventListener('click', (e) => {
-  if (e.target.id === 'btn-delete' && e.target.getAttribute('data-index')) {
-    console.log(e.target.getAttribute('data-index'));
+content.addEventListener('click', (e) => {
+  if (e.target.id === 'btn-delete') {
     deleteTask(e.target.getAttribute('data-index'));
-  } else if (
-    e.target.id === 'btn-completed' &&
-    e.target.getAttribute('data-index')
-  ) {
+  } else if (e.target.id === 'btn-completed') {
     completeTask(e.target.getAttribute('data-index'));
-  } else if (
-    e.target.id === 'btn-edit' &&
-    e.target.getAttribute('data-index')
-  ) {
-    showEditTask(e.target.getAttribute('data-index'));
+  } else if (e.target.id === 'btn-edit') {
+    editTask(e.target.getAttribute('data-index'));
   }
 });
 
-document.getElementById('toggle-theme').addEventListener('click', (e) => {
-  document.body.classList.toggle('dark');
-  document.getElementsByTagName('nav')[0].classList.toggle('dark');
-  myForm.classList.toggle('dark');
-  document.querySelector('.modal-content').classList.toggle('dark');
+toggleTheme.addEventListener('click', () => {
+  body.className === 'light'
+    ? (defaultTheme = 'dark', body.classList.remove('light'), body.classList.add('dark'), updateLocalStorageTheme())
+    : (defaultTheme = 'light', body.classList.remove('dark'), body.classList.add('light'), updateLocalStorageTheme());
 });
 
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  updateLocalStorege();
+document.addEventListener("DOMContentLoaded", () => {
+  !localStorage.theme
+  ? (defaultTheme = 'light')
+  : (defaultTheme = localStorage.getItem('theme'));
+
+  body.classList.add(defaultTheme)
+});
+
+function deleteTask(itemID) {
+  tasks = tasks.filter(item => item.id !== itemID)
+  updateLocalStorage();
   fillHTMLList();
 }
-let listenerSubmitEditTask;
-function showEditTask(index) {
-  showModal(index);
+function editTask(index) {
+  showModal();
   myForm.removeEventListener('submit', taskSubmit);
-  document.querySelector('.modal-title').innerText = `Edit task`;
+  titleHeaderForm.innerText = `Edit task`;
 
   myForm.elements.title.value = tasks[index].title;
   myForm.elements.text.value = tasks[index].text;
@@ -177,64 +225,41 @@ function submitEditTask(index, e) {
   tasks[index].title = myForm.elements.title.value;
   tasks[index].text = myForm.elements.text.value;
   tasks[index].priority = formValue.get('priority');
-  updateLocalStorege();
+  updateLocalStorage();
   fillHTMLList();
   myForm.removeEventListener('submit', listenerSubmitEditTask);
   myForm.reset();
   myForm['btn-close'].click();
 }
 
-function showModal(index) {
-  document.getElementById('btn-show-modal').setAttribute('data-index', index);
-  document.getElementById('btn-show-modal').click(index);
-  myForm.elements['btn-close'].innerText = 'Cancel';
-  myForm.elements['btn-submit'].innerText = 'Save';
-  document.getElementById('btn-close').addEventListener(
-    'click',
-    () => {
-      document.getElementById('btn-show-modal').removeAttribute('data-index');
-    },
-    { once: true }
-  );
+function showModal() {
+  btnAddTask.click();
+  btnCloseForm.innerText = 'Cancel';
+  btnSubmitForm.innerText = 'Save';
 }
 
-document.getElementById('exampleModal').addEventListener('click', (e) => {
-  console.log(e.target.id);
+exampleModal.addEventListener('click', (e) => {
   if (
     e.target.id === 'exampleModal' ||
     e.target.id === 'btn-close' ||
     e.target.id === 'close-right'
   ) {
     myForm.removeEventListener('submit', listenerSubmitEditTask);
+    myForm.removeEventListener('submit', taskSubmit);
     myForm.reset();
   }
 });
 
-function sortUp(arr) {
-  tasks = arr.sort((a, b) => a.id - b.id);
-  updateLocalStorege();
+btnSortUp.addEventListener('click', () => {
+  defaultSort = 'up';
+  updateLocalStorageSorting()
   fillHTMLList();
-}
+});
 
-function sortDown(arr) {
-  tasks = arr.sort((a, b) => b.id - a.id);
-  updateLocalStorege();
+btnSortDown.addEventListener('click', () => {
+  defaultSort = 'down';
+  updateLocalStorageSorting()
   fillHTMLList();
-}
-
-document.getElementById('sorting').addEventListener('click', (e) => {
-  if (
-    e.target.className === 'btn btn-primary mx-2' ||
-    e.target.className === 'fas fa-sort-numeric-up-alt'
-  ) {
-    sortUp(tasks);
-  }
-  if (
-    e.target.className === 'fas fa-sort-numeric-up' ||
-    e.target.className === 'btn btn-primary'
-  ) {
-    sortDown(tasks);
-  }
 });
 
 fillHTMLList();
