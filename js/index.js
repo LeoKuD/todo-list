@@ -14,27 +14,37 @@ const btnSortUp = document.getElementById('sort-up');
 const btnSortDown = document.getElementById('sort-down');
 
 const body = document.body;
+const dark = 'dark';
+const light = 'light';
+const up = 'up';
+const down = 'down';
 let tasks;
 let listenerSubmitEditTask = null;
 let defaultSort;
 let defaultTheme;
 
-!localStorage.tasks
+const localStorageValues =  {
+  tasks: 'tasks',
+  sorting: 'sorting',
+  theme: 'theme'
+}
+
+!localStorage[localStorageValues.tasks]
   ? (tasks = [])
-  : (tasks = JSON.parse(localStorage.getItem('tasks')));
+  : (tasks = JSON.parse(localStorage.getItem(localStorageValues.tasks)));
 
-!localStorage.sorting
-  ? (defaultSort = 'up')
-  : (defaultSort = localStorage.getItem('sorting'));
+!localStorage[localStorageValues.sorting]
+  ? (defaultSort = up)
+  : (defaultSort = JSON.parse(localStorage.getItem(localStorageValues.sorting)));
 
-  makeId = () => {
-    let ID = "";
-    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    for ( let i = 0; i < 12; i++ ) {
-      ID += characters.charAt(Math.floor(Math.random() * 36));
-    }
-    return ID;
+const makeId = () => {
+  let ID = '';
+  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  for (let i = 0; i < 12; i++) {
+    ID += characters.charAt(Math.floor(Math.random() * 36));
   }
+  return ID;
+};
 
 function Task([title, text, priority]) {
   this.id = makeId();
@@ -49,36 +59,17 @@ function fillHTMLList() {
   listCurrentTasks.textContent = '';
   listCompletedTasks.textContent = '';
   if (tasks.length) {
-    if (defaultSort === 'up') {
+    if (defaultSort === up) {
       tasks.forEach((item, index) => {
-        if (!item.isDone) {
-          listCurrentTasks.insertAdjacentHTML(
-            'beforeend',
-            taskTemplate(item, index)
-          );
-        } else {
-          listCompletedTasks.insertAdjacentHTML(
-            'beforeend',
-            taskTemplate(item, index)
-          );
-        }
+        !item.isDone ? listCurrentTasks.insertAdjacentHTML('beforeend', taskTemplate(item, index))
+          : listCompletedTasks.insertAdjacentHTML('beforeend', taskTemplate(item, index));
       });
-    } else if (defaultSort === 'down') {
+    } else {
       tasks.forEach((item, index) => {
-        if (!item.isDone) {
-          listCurrentTasks.insertAdjacentHTML(
-            'afterbegin',
-            taskTemplate(item, index)
-          );
-        } else {
-          listCompletedTasks.insertAdjacentHTML(
-            'afterbegin',
-            taskTemplate(item, index)
-          );
-        }
+        !item.isDone ? listCurrentTasks.insertAdjacentHTML('afterbegin', taskTemplate(item, index))
+          : listCompletedTasks.insertAdjacentHTML('afterbegin',taskTemplate(item, index));
       });
     }
-
   }
   const countCompletedTasks = tasks.filter(
     (item) => item.isDone === true
@@ -89,7 +80,9 @@ function fillHTMLList() {
 
 function getDate(stamp) {
   const date = new Date(stamp);
-  return ` ${date.getHours()}:${date.getMinutes()} ${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
+  const month = date.getMonth() < 9 ? `0${date.getMonth()+1}` : date.getMonth()+1;
+  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  return ` ${date.getHours()}:${date.getMinutes()} ${day}.${month}.${date.getFullYear()}`;
 }
 
 function taskTemplate(item, index) {
@@ -129,7 +122,9 @@ function taskTemplate(item, index) {
                       : '<div class="empty-div"></div>'
                   }
 
-                  <button data-index="${item.id}" type="button" class="btn btn-danger w-100" id="btn-delete">
+                  <button data-index="${
+                    item.id
+                  }" type="button" class="btn btn-danger w-100" id="btn-delete">
                     Delete
                   </button>
                 </div>
@@ -138,16 +133,8 @@ function taskTemplate(item, index) {
     `;
 }
 
-const updateLocalStorage = () => {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-};
-
-const updateLocalStorageSorting = () => {
-  localStorage.setItem('sorting', defaultSort);
-};
-
-const updateLocalStorageTheme = () => {
-  localStorage.setItem('theme', defaultTheme);
+const updateLocalStorage = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
 };
 
 btnAddTask.addEventListener('click', () => {
@@ -161,7 +148,7 @@ function taskSubmit(e) {
   e.preventDefault();
   const formValue = new FormData(myForm);
   tasks.push(new Task([...formValue.values()]));
-  updateLocalStorage();
+  updateLocalStorage(localStorageValues.tasks, tasks);
   fillHTMLList();
   myForm.reset();
   btnCloseForm.click();
@@ -170,7 +157,7 @@ function taskSubmit(e) {
 
 function completeTask(index) {
   tasks[index].isDone = !tasks[index].isDone;
-  updateLocalStorage();
+  updateLocalStorage(localStorageValues.tasks, tasks);
   fillHTMLList();
 }
 
@@ -185,22 +172,28 @@ content.addEventListener('click', (e) => {
 });
 
 toggleTheme.addEventListener('click', () => {
-  body.className === 'light'
-    ? (defaultTheme = 'dark', body.classList.remove('light'), body.classList.add('dark'), updateLocalStorageTheme())
-    : (defaultTheme = 'light', body.classList.remove('dark'), body.classList.add('light'), updateLocalStorageTheme());
+  body.className === light
+    ? ((defaultTheme = dark),
+      body.classList.remove(light),
+      body.classList.add(dark),
+      updateLocalStorage(localStorageValues.theme, defaultTheme))
+    : ((defaultTheme = light),
+      body.classList.remove(dark),
+      body.classList.add(light),
+      updateLocalStorage(localStorageValues.theme, defaultTheme));
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  !localStorage.theme
-  ? (defaultTheme = 'light')
-  : (defaultTheme = localStorage.getItem('theme'));
+document.addEventListener('DOMContentLoaded', () => {
+  !localStorage[localStorageValues.theme]
+    ? (defaultTheme = light)
+    : (defaultTheme = JSON.parse(localStorage.getItem(localStorageValues.theme)));
 
-  body.classList.add(defaultTheme)
+  body.classList.add(defaultTheme);
 });
 
 function deleteTask(itemID) {
-  tasks = tasks.filter(item => item.id !== itemID)
-  updateLocalStorage();
+  tasks = tasks.filter((item) => item.id !== itemID);
+  updateLocalStorage(localStorageValues.tasks, tasks);
   fillHTMLList();
 }
 function editTask(index) {
@@ -225,7 +218,7 @@ function submitEditTask(index, e) {
   tasks[index].title = myForm.elements.title.value;
   tasks[index].text = myForm.elements.text.value;
   tasks[index].priority = formValue.get('priority');
-  updateLocalStorage();
+  updateLocalStorage(localStorageValues.tasks, tasks);
   fillHTMLList();
   myForm.removeEventListener('submit', listenerSubmitEditTask);
   myForm.reset();
@@ -251,14 +244,14 @@ exampleModal.addEventListener('click', (e) => {
 });
 
 btnSortUp.addEventListener('click', () => {
-  defaultSort = 'up';
-  updateLocalStorageSorting()
+  defaultSort = up;
+  updateLocalStorage(localStorageValues.sorting, defaultSort);
   fillHTMLList();
 });
 
 btnSortDown.addEventListener('click', () => {
-  defaultSort = 'down';
-  updateLocalStorageSorting()
+  defaultSort = down;
+  updateLocalStorage(localStorageValues.sorting, defaultSort);
   fillHTMLList();
 });
 

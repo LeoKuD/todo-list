@@ -1,10 +1,10 @@
 .dark {
-  transition: 1s;
+  transition: 0.5s;
   background-color: #1f1d36 !important;
   color: #fff;
 }
 .dark nav {
-  transition: 1s;
+  transition: 0.5s;
   background-color: #3f3351 !important;
 }
 .dark nav button {
@@ -27,7 +27,7 @@
   background-color: #e9a6a6 !important;
 }
 .dark button:not(.close) {
-  transition: 1s;
+  transition: 0.5s;
   background-color: #3f3351;
   border-color: transparent;
 }
@@ -46,9 +46,12 @@
 .dark #dropdown-theme {
   background-color: #3f3351;
 }
+.dark .container {
+  color: #fff;
+}
 
 #dropdown-theme {
-  transition: 1s;
+  transition: 0.5s;
   min-width: 0;
 }
 
@@ -57,7 +60,7 @@
 }
 
 .light {
-  transition: 1s;
+  transition: 0.5s;
 }
 .light body {
   background-color: #fff !important;
@@ -85,11 +88,11 @@
   outline: none;
   cursor: pointer;
   appearance: none;
-  transition: 1s;
+  transition: 0.5s;
 }
 
 .toggle-button::after {
-  transition: 1s;
+  transition: 0.5s;
   content: "";
   display: inline-block;
   position: absolute;
