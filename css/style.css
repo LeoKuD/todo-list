@@ -62,9 +62,6 @@
 .light {
   transition: 0.5s;
 }
-.light body {
-  background-color: #fff !important;
-}
 .light .Low {
   background-color: green;
 }

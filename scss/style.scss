@@ -1,63 +1,63 @@
-$bc-color-primary: #1f1d36;
-$bc-color-secondary: #3f3351;
-$bc-color-tertiary: #e9a6a6;
+$bg-color-primary: #1f1d36;
+$bg-color-secondary: #3f3351;
+$bg-color-tertiary: #e9a6a6;
 $priority-color-primary-light: green;
 $priority-color-secondary-light: yellow;
 $priority-color-tertiary-light: orange;
-$bc-color-primary-light: #fff;
+$bg-color-primary-light: #fff;
 $transition: 0.5s;
 
 .dark {
   transition: $transition;
-  background-color: $bc-color-primary !important;
+  background-color: $bg-color-primary !important;
   color: #fff;
 
   nav {
     transition: $transition;
-    background-color: $bc-color-secondary !important;
+    background-color: $bg-color-secondary !important;
     button {
-      background-color: $bc-color-tertiary !important;
+      background-color: $bg-color-tertiary !important;
     }
   }
   .Low {
-    background-color: $bc-color-tertiary !important;
+    background-color: $bg-color-tertiary !important;
   }
   .Medium {
-    background-color: $bc-color-secondary !important;
+    background-color: $bg-color-secondary !important;
   }
 
   .High {
     background-color: darken(
-      $color: $bc-color-secondary,
+      $color: $bg-color-secondary,
       $amount: 15%
     ) !important;
   }
   .modal-content {
-    background-color: $bc-color-tertiary !important;
+    background-color: $bg-color-tertiary !important;
   }
   form {
     color: black;
-    background-color: $bc-color-tertiary !important;
+    background-color: $bg-color-tertiary !important;
   }
   button:not(.close) {
     transition: $transition;
-    background-color: $bc-color-secondary;
+    background-color: $bg-color-secondary;
     border-color: transparent;
     &:hover {
-      background-color: darken($color: $bc-color-secondary, $amount: 10%);
+      background-color: darken($color: $bg-color-secondary, $amount: 10%);
     }
   }
   #btn-delete {
-    background-color: $bc-color-tertiary;
+    background-color: $bg-color-tertiary;
   }
   #btn-edit {
-    background-color: $bc-color-secondary;
+    background-color: $bg-color-secondary;
   }
   #btn-completed {
-    background-color: $bc-color-primary;
+    background-color: $bg-color-primary;
   }
   #dropdown-theme {
-    background-color: $bc-color-secondary;
+    background-color: $bg-color-secondary;
   }
   .container {
     color: #fff;
@@ -74,9 +74,6 @@ $transition: 0.5s;
 
 .light {
   transition: $transition;
-  body {
-    background-color: $bc-color-primary-light !important;
-  }
   .Low {
     background-color: $priority-color-primary-light;
   }
@@ -107,7 +104,7 @@ $transition: 0.5s;
 }
 
 .toggle-button::after {
-  transition: $transition / 1;
+  transition: $transition;
   content: '';
 
   display: inline-block;
@@ -125,8 +122,8 @@ $transition: 0.5s;
 
 .toggle-button:checked::after {
   transform: translateX(calc(100% + 3px));
-  background-color: $bc-color-tertiary;
+  background-color: $bg-color-tertiary;
 }
 .toggle-button:checked {
-  background-color: $bc-color-primary;
+  background-color: $bg-color-primary;
 }
