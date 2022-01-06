@@ -72,8 +72,6 @@ $transition: 0.5s;
   padding: 0.3rem 0;
 }
 
-.light {
-  transition: $transition;
   .Low {
     background-color: $priority-color-primary-light;
   }
@@ -85,7 +83,7 @@ $transition: 0.5s;
   .High {
     background-color: $priority-color-tertiary-light;
   }
-}
+
 
 .toggle-button {
   position: relative;
@@ -116,8 +114,6 @@ $transition: 0.5s;
   height: 20px;
   background-color: blue;
   border-radius: 50%;
-
-  transform: translateX(0);
 }
 
 .toggle-button:checked::after {
@@ -126,4 +122,11 @@ $transition: 0.5s;
 }
 .toggle-button:checked {
   background-color: $bg-color-primary;
+}
+
+.none {
+  display: none;
+}
+.inline-block {
+  display: inline-block;
 }

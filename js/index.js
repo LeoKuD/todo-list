@@ -19,7 +19,6 @@ const body = document.body;
 let tasks;
 let listenerSubmitEditTask = null;
 let selectedSort;
-let selectedTheme;
 
 const LOCALSTORAGEKEYS = {
   tasks: 'tasks',
@@ -44,6 +43,8 @@ const KEYSVARIABLES = {
   exampleModal: 'exampleModal',
   btnClose: 'btn-close',
   closeRight: 'close-right',
+  inlineBlock: 'inline-block',
+  none: 'none',
 };
 
 const updateLocalStorage = (key, value) => {
@@ -51,10 +52,12 @@ const updateLocalStorage = (key, value) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  selectedTheme =
-    JSON.parse(localStorage.getItem(LOCALSTORAGEKEYS.theme)) ||
-    KEYSVARIABLES.light;
-  body.classList.add(selectedTheme);
+  if (
+    JSON.parse(localStorage.getItem(LOCALSTORAGEKEYS.theme)) ===
+    KEYSVARIABLES.dark
+  ) {
+    body.classList.add(KEYSVARIABLES.dark);
+  }
 });
 
 btnSubmitEditForm.id = 'btnSubmitEditForm';
@@ -97,13 +100,15 @@ function fillHTMLList() {
   if (tasks.length) {
     tasks.forEach((item, index) => {
       const taskItem = taskTemplate(item, index);
-      selectedSort === KEYSVARIABLES.up
-        ? !item.isDone
+      if (selectedSort === KEYSVARIABLES.up) {
+        !item.isDone
           ? listCurrentTasks.append(taskItem)
-          : listCompletedTasks.append(taskItem)
-        : !item.isDone
-        ? listCurrentTasks.prepend(taskItem)
-        : listCompletedTasks.prepend(taskItem);
+          : listCompletedTasks.append(taskItem);
+      } else {
+        !item.isDone
+          ? listCurrentTasks.prepend(taskItem)
+          : listCompletedTasks.prepend(taskItem);
+      }
     });
   }
   const countCompletedTasks = tasks.filter((item) => item.isDone).length;
@@ -177,9 +182,13 @@ function taskTemplate(item, index) {
 }
 
 btnAddTask.addEventListener('click', () => {
+  myForm.reset();
   btnCloseForm.innerText = KEYSVARIABLES.close;
   btnSubmitForm.innerText = KEYSVARIABLES.addTaks;
   titleHeaderForm.innerText = KEYSVARIABLES.addTaks;
+  btnSubmitForm.classList.add(KEYSVARIABLES.inlineBlock);
+  btnSubmitEditForm.classList.add(KEYSVARIABLES.none);
+  btnSubmitEditForm.classList.remove(KEYSVARIABLES.inlineBlock);
 });
 
 function taskSubmit() {
@@ -187,7 +196,6 @@ function taskSubmit() {
   tasks.push(new Task([...formValue.values()]));
   updateLocalStorage(LOCALSTORAGEKEYS.tasks, tasks);
   fillHTMLList();
-  myForm.reset();
   btnCloseForm.click();
 }
 
@@ -207,13 +215,15 @@ content.addEventListener('click', (e) => {
   }
 });
 
+function setTheme() {
+  body.classList.contains(KEYSVARIABLES.dark)
+    ? updateLocalStorage(LOCALSTORAGEKEYS.theme, KEYSVARIABLES.dark)
+    : localStorage.removeItem(LOCALSTORAGEKEYS.theme);
+}
+
 toggleTheme.addEventListener('click', () => {
-  body.classList.toggle(selectedTheme);
-  selectedTheme === KEYSVARIABLES.light
-    ? (selectedTheme = KEYSVARIABLES.dark)
-    : (selectedTheme = KEYSVARIABLES.light);
-  body.classList.toggle(selectedTheme);
-  updateLocalStorage(LOCALSTORAGEKEYS.theme, selectedTheme);
+  body.classList.toggle(KEYSVARIABLES.dark);
+  setTheme();
 });
 
 function deleteTask(itemID) {
@@ -227,11 +237,8 @@ function editTask(index) {
 
   myForm.elements.title.value = tasks[index].title;
   myForm.elements.text.value = tasks[index].text;
-  myForm.elements.priority.forEach((item) => {
-    item.id === tasks[index].priority
-      ? (item.checked = true)
-      : (item.checked = false);
-  });
+
+  myForm.elements[tasks[index].priority].checked = true;
 }
 
 function submitEditTask(index) {
@@ -241,7 +248,6 @@ function submitEditTask(index) {
   tasks[index].priority = formValue.get('priority');
   updateLocalStorage(LOCALSTORAGEKEYS.tasks, tasks);
   fillHTMLList();
-  myForm.reset();
   myForm['btn-close'].click();
 }
 
@@ -249,23 +255,12 @@ function showModal(index) {
   btnAddTask.click();
   btnCloseForm.innerText = KEYSVARIABLES.cancel;
   btnSubmitEditForm.innerText = KEYSVARIABLES.save;
-  btnSubmitEditForm.style.display = 'inline-block';
+  btnSubmitEditForm.classList.add(KEYSVARIABLES.inlineBlock);
   btnSubmitEditForm.setAttribute(KEYSVARIABLES.dataIndex, index);
-  btnSubmitForm.style.display = 'none';
+  btnSubmitForm.classList.add(KEYSVARIABLES.none);
+  btnSubmitForm.classList.remove(KEYSVARIABLES.inlineBlock);
   bottomForm.append(btnSubmitEditForm);
 }
-
-exampleModal.addEventListener('click', (e) => {
-  if (
-    e.target.id === KEYSVARIABLES.exampleModal ||
-    e.target.id === KEYSVARIABLES.btnClose ||
-    e.target.id === KEYSVARIABLES.closeRight
-  ) {
-    myForm.reset();
-    btnSubmitForm.style.display = 'inline-block';
-    btnSubmitEditForm.style.display = 'none';
-  }
-});
 
 btnSortUp.addEventListener('click', () => {
   selectedSort = KEYSVARIABLES.up;

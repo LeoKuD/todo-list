@@ -59,16 +59,15 @@
   padding: 0.3rem 0;
 }
 
-.light {
-  transition: 0.5s;
-}
-.light .Low {
+.Low {
   background-color: green;
 }
-.light .Medium {
+
+.Medium {
   background-color: yellow;
 }
-.light .High {
+
+.High {
   background-color: orange;
 }
 
@@ -99,7 +98,6 @@
   height: 20px;
   background-color: blue;
   border-radius: 50%;
-  transform: translateX(0);
 }
 
 .toggle-button:checked::after {
@@ -109,4 +107,12 @@
 
 .toggle-button:checked {
   background-color: #1f1d36;
+}
+
+.none {
+  display: none;
+}
+
+.inline-block {
+  display: inline-block;
 }
