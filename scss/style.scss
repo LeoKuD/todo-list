@@ -19,14 +19,14 @@ $transition: 0.5s;
       background-color: $bg-color-tertiary !important;
     }
   }
-  .Low {
+  .low {
     background-color: $bg-color-tertiary !important;
   }
-  .Medium {
+  .medium {
     background-color: $bg-color-secondary !important;
   }
 
-  .High {
+  .high {
     background-color: darken(
       $color: $bg-color-secondary,
       $amount: 15%
@@ -72,15 +72,15 @@ $transition: 0.5s;
   padding: 0.3rem 0;
 }
 
-  .Low {
+  .low {
     background-color: $priority-color-primary-light;
   }
 
-  .Medium {
+  .medium {
     background-color: $priority-color-secondary-light;
   }
 
-  .High {
+  .high {
     background-color: $priority-color-tertiary-light;
   }
 

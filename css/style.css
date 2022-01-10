@@ -10,13 +10,13 @@
 .dark nav button {
   background-color: #e9a6a6 !important;
 }
-.dark .Low {
+.dark .low {
   background-color: #e9a6a6 !important;
 }
-.dark .Medium {
+.dark .medium {
   background-color: #3f3351 !important;
 }
-.dark .High {
+.dark .high {
   background-color: #1a1522 !important;
 }
 .dark .modal-content {
@@ -59,15 +59,15 @@
   padding: 0.3rem 0;
 }
 
-.Low {
+.low {
   background-color: green;
 }
 
-.Medium {
+.medium {
   background-color: yellow;
 }
 
-.High {
+.high {
   background-color: orange;
 }
 
