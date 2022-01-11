@@ -1,0 +1,118 @@
+.dark {
+  transition: 0.5s;
+  background-color: #1f1d36 !important;
+  color: #fff;
+}
+.dark nav {
+  transition: 0.5s;
+  background-color: #3f3351 !important;
+}
+.dark nav button {
+  background-color: #e9a6a6 !important;
+}
+.dark .low {
+  background-color: #e9a6a6 !important;
+}
+.dark .medium {
+  background-color: #3f3351 !important;
+}
+.dark .high {
+  background-color: #1a1522 !important;
+}
+.dark .modal-content {
+  background-color: #e9a6a6 !important;
+}
+.dark form {
+  color: black;
+  background-color: #e9a6a6 !important;
+}
+.dark button:not(.close) {
+  transition: 0.5s;
+  background-color: #3f3351;
+  border-color: transparent;
+}
+.dark button:not(.close):hover {
+  background-color: #271f32;
+}
+.dark #btn-delete {
+  background-color: #e9a6a6;
+}
+.dark #btn-edit {
+  background-color: #3f3351;
+}
+.dark #btn-completed {
+  background-color: #1f1d36;
+}
+.dark #dropdown-theme {
+  background-color: #3f3351;
+}
+.dark .container {
+  color: #fff;
+}
+
+#dropdown-theme {
+  transition: 0.5s;
+  min-width: 0;
+}
+
+.empty-div {
+  padding: 0.3rem 0;
+}
+
+.low {
+  background-color: green;
+}
+
+.medium {
+  background-color: yellow;
+}
+
+.high {
+  background-color: orange;
+}
+
+.toggle-button {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  margin: 0;
+  vertical-align: top;
+  background: #ffffff;
+  border: 1px solid #bbc1e1;
+  border-radius: 30px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: 0.5s;
+}
+
+.toggle-button::after {
+  transition: 0.5s;
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: 3px;
+  top: 1.5px;
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  border-radius: 50%;
+}
+
+.toggle-button:checked::after {
+  transform: translateX(calc(100% + 3px));
+  background-color: #e9a6a6;
+}
+
+.toggle-button:checked {
+  background-color: #1f1d36;
+}
+
+.none {
+  display: none;
+}
+
+.inline-block {
+  display: inline-block;
+}

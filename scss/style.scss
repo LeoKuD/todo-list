@@ -1,0 +1,132 @@
+$bg-color-primary: #1f1d36;
+$bg-color-secondary: #3f3351;
+$bg-color-tertiary: #e9a6a6;
+$priority-color-primary-light: green;
+$priority-color-secondary-light: yellow;
+$priority-color-tertiary-light: orange;
+$bg-color-primary-light: #fff;
+$transition: 0.5s;
+
+.dark {
+  transition: $transition;
+  background-color: $bg-color-primary !important;
+  color: #fff;
+
+  nav {
+    transition: $transition;
+    background-color: $bg-color-secondary !important;
+    button {
+      background-color: $bg-color-tertiary !important;
+    }
+  }
+  .low {
+    background-color: $bg-color-tertiary !important;
+  }
+  .medium {
+    background-color: $bg-color-secondary !important;
+  }
+
+  .high {
+    background-color: darken(
+      $color: $bg-color-secondary,
+      $amount: 15%
+    ) !important;
+  }
+  .modal-content {
+    background-color: $bg-color-tertiary !important;
+  }
+  form {
+    color: black;
+    background-color: $bg-color-tertiary !important;
+  }
+  button:not(.close) {
+    transition: $transition;
+    background-color: $bg-color-secondary;
+    border-color: transparent;
+    &:hover {
+      background-color: darken($color: $bg-color-secondary, $amount: 10%);
+    }
+  }
+  #btn-delete {
+    background-color: $bg-color-tertiary;
+  }
+  #btn-edit {
+    background-color: $bg-color-secondary;
+  }
+  #btn-completed {
+    background-color: $bg-color-primary;
+  }
+  #dropdown-theme {
+    background-color: $bg-color-secondary;
+  }
+  .container {
+    color: #fff;
+  }
+}
+#dropdown-theme {
+  transition: $transition;
+  min-width: 0;
+}
+
+.empty-div {
+  padding: 0.3rem 0;
+}
+
+  .low {
+    background-color: $priority-color-primary-light;
+  }
+
+  .medium {
+    background-color: $priority-color-secondary-light;
+  }
+
+  .high {
+    background-color: $priority-color-tertiary-light;
+  }
+
+
+.toggle-button {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  margin: 0;
+  vertical-align: top;
+  background: #ffffff;
+  border: 1px solid #bbc1e1;
+  border-radius: 30px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: $transition;
+}
+
+.toggle-button::after {
+  transition: $transition;
+  content: '';
+
+  display: inline-block;
+  position: absolute;
+  left: 3px;
+  top: 1.5px;
+
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  border-radius: 50%;
+}
+
+.toggle-button:checked::after {
+  transform: translateX(calc(100% + 3px));
+  background-color: $bg-color-tertiary;
+}
+.toggle-button:checked {
+  background-color: $bg-color-primary;
+}
+
+.none {
+  display: none;
+}
+.inline-block {
+  display: inline-block;
+}
